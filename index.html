@@ -1,0 +1,473 @@
+<div id="fd-wrap">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+#fd-wrap{all:initial;display:block;font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased;color:#1c0810;background:#f9f3f1;}
+#fd-wrap *,#fd-wrap *::before,#fd-wrap *::after{box-sizing:border-box;margin:0;padding:0;}
+#fd-wrap{--ink:#1c0810;--deep:#f9f3f1;--stone:#8a6b72;--sand:#ddc9cc;--linen:#f0e6e8;--white:#fffcfc;--gold:#b8864a;--gold-lt:#d4a86a;--burg:#7a1f30;--burg-lt:#9a2f44;--serif:'Cormorant Garamond','Palatino Linotype',Georgia,serif;--sans:'DM Sans',-apple-system,sans-serif;}
+
+/* CANVAS */
+#fd-curveCanvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+
+/* NAV */
+#fd-nav{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:rgba(255,252,252,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--sand);}
+#fd-nav .fd-logo{font-family:var(--serif);font-size:1.25rem;font-weight:300;letter-spacing:0.08em;color:var(--ink);text-decoration:none;}
+#fd-nav .fd-logo span{color:var(--burg);font-style:italic;}
+#fd-nav .fd-cta{font-size:0.8rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--white);background:var(--burg);padding:10px 24px;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:background 0.2s;}
+#fd-nav .fd-cta:hover{background:var(--burg-lt);}
+
+/* SCROLL SPINNER */
+#fd-spinner{position:fixed;bottom:48px;right:48px;width:64px;height:64px;pointer-events:none;z-index:9998;opacity:0;transition:opacity 0.4s;}
+#fd-spinner.visible{opacity:1;}
+#fd-spinner svg{width:100%;height:100%;}
+#fd-spinner-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:8px;height:8px;background:var(--burg);border-radius:50%;}
+
+/* SPIN RINGS */
+#fd-wrap .spin-ring{position:absolute;border-radius:50%;border:1px solid rgba(122,31,48,0.18);pointer-events:none;animation:fd-spin linear infinite;}
+#fd-wrap .spin-ring::after{content:'';position:absolute;width:7px;height:7px;background:var(--burg);border-radius:50%;top:-3.5px;left:50%;transform:translateX(-50%);opacity:0.45;}
+#fd-wrap .sr1{width:320px;height:320px;top:50%;left:50%;margin-top:-160px;margin-left:-160px;animation-duration:22s;}
+#fd-wrap .sr2{width:480px;height:480px;top:50%;left:50%;margin-top:-240px;margin-left:-240px;animation-duration:36s;animation-direction:reverse;border-style:dashed;opacity:0.6;}
+#fd-wrap .sr3{width:640px;height:640px;top:50%;left:50%;margin-top:-320px;margin-left:-320px;animation-duration:52s;opacity:0.35;}
+@keyframes fd-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+/* DOTS */
+#fd-wrap .dot-field{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+#fd-wrap .dot{position:absolute;border-radius:50%;background:var(--burg);animation:fd-float linear infinite;}
+@keyframes fd-float{0%{transform:translateY(0) scale(1);opacity:0;}15%{opacity:0.12;}85%{opacity:0.12;}100%{transform:translateY(-150px) scale(1.5);opacity:0;}}
+
+/* CORNER ORNAMENTS */
+#fd-wrap .co{position:absolute;width:220px;height:220px;pointer-events:none;}
+#fd-wrap .co-tl{top:0;left:0;}#fd-wrap .co-tr{top:0;right:0;}#fd-wrap .co-bl{bottom:0;left:0;}#fd-wrap .co-br{bottom:0;right:0;}
+
+/* HERO */
+#fd-hero{padding:160px 48px 120px;text-align:center;background:var(--linen);position:relative;overflow:hidden;z-index:1;}
+#fd-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(122,31,48,0.1) 0%,transparent 70%);pointer-events:none;}
+#fd-wrap .hero-wm{position:absolute;font-family:var(--serif);font-size:clamp(5rem,16vw,14rem);font-weight:300;color:var(--burg);opacity:0.05;letter-spacing:0.25em;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;user-select:none;}
+#fd-wrap .hero-ey{font-size:0.72rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--burg);margin-bottom:20px;position:relative;display:block;}
+#fd-hero h1{font-family:var(--serif);font-size:clamp(2.8rem,6vw,5rem);font-weight:300;line-height:1.1;color:var(--ink);margin-bottom:24px;position:relative;}
+#fd-hero h1 em{font-style:italic;color:var(--burg);}
+#fd-wrap .hero-sub{font-size:1rem;color:var(--stone);max-width:520px;margin:0 auto 48px;line-height:1.7;position:relative;}
+#fd-wrap .hero-div{width:60px;height:1px;background:var(--burg);margin:0 auto;opacity:0.4;position:relative;}
+#fd-wrap .hero-wave{position:absolute;bottom:-1px;left:0;width:100%;height:80px;pointer-events:none;}
+
+/* SECTIONS */
+#fd-wrap section,#fd-wrap .fd-section{position:relative;z-index:1;}
+
+/* DIVIDER FLOURISH */
+#fd-wrap .flourish{display:flex;align-items:center;justify-content:center;gap:16px;padding:6px 48px;position:relative;z-index:1;background:transparent;}
+#fd-wrap .flourish::before,#fd-wrap .flourish::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--burg));opacity:0.3;}
+#fd-wrap .flourish::after{background:linear-gradient(to left,transparent,var(--burg));}
+#fd-wrap .flourish span{font-size:0.55rem;color:var(--burg);opacity:0.6;letter-spacing:0.3em;}
+
+/* SECTION LABELS */
+#fd-wrap .s-label{font-size:0.7rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--burg);text-align:center;margin-bottom:12px;display:block;}
+#fd-wrap .s-title{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:300;text-align:center;color:var(--ink);margin-bottom:12px;display:block;}
+#fd-wrap .s-sub{text-align:center;color:var(--stone);font-size:0.95rem;max-width:480px;margin:0 auto 64px;display:block;}
+
+/* PRICING */
+#fd-pricing{padding:100px 32px;background:var(--deep);position:relative;overflow:hidden;}
+#fd-pricing .sec-wm{position:absolute;font-family:var(--serif);font-size:clamp(5rem,13vw,11rem);font-weight:300;color:var(--burg);opacity:0.04;bottom:-1rem;right:-0.5rem;letter-spacing:0.2em;pointer-events:none;user-select:none;}
+#fd-wrap .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;max-width:1200px;margin:0 auto;border:1px solid var(--sand);}
+#fd-wrap .tier{padding:44px 32px 40px;border-right:1px solid var(--sand);position:relative;transition:background 0.25s;background:var(--white);}
+#fd-wrap .tier:last-child{border-right:none;}
+#fd-wrap .tier:hover{background:var(--linen);}
+#fd-wrap .tier.featured{background:var(--burg);color:var(--white);}
+#fd-wrap .tier.featured:hover{background:var(--burg-lt);}
+#fd-wrap .tier-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--burg);color:var(--white);font-size:0.62rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;padding:5px 14px;white-space:nowrap;}
+#fd-wrap .tier-name{font-family:var(--serif);font-size:1.4rem;font-weight:300;margin-bottom:4px;color:var(--ink);display:block;}
+#fd-wrap .tier.featured .tier-name{color:#f5dde2;}
+#fd-wrap .tier-tag{font-size:0.78rem;color:var(--stone);margin-bottom:28px;min-height:2.4em;display:block;}
+#fd-wrap .tier.featured .tier-tag{color:rgba(255,220,228,0.7);}
+#fd-wrap .t-currency{font-size:1rem;font-weight:400;color:var(--burg);vertical-align:top;margin-top:6px;display:inline-block;}
+#fd-wrap .t-amount{font-family:var(--serif);font-size:3.2rem;font-weight:300;line-height:1;color:var(--ink);}
+#fd-wrap .tier.featured .t-amount{color:#fde8ec;}
+#fd-wrap .t-qual{display:block;font-size:0.72rem;color:var(--stone);margin-top:4px;letter-spacing:0.06em;}
+#fd-wrap .tier.featured .t-qual{color:rgba(255,220,228,0.6);}
+#fd-wrap .t-div{width:100%;height:1px;background:var(--sand);margin:20px 0 24px;}
+#fd-wrap .tier.featured .t-div{background:rgba(255,220,228,0.2);}
+#fd-wrap .f-list{list-style:none;margin-bottom:36px;}
+#fd-wrap .f-list li{font-size:0.85rem;color:var(--stone);padding:6px 0;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid var(--sand);}
+#fd-wrap .f-list li:last-child{border-bottom:none;}
+#fd-wrap .tier.featured .f-list li{color:rgba(255,220,228,0.85);border-bottom-color:rgba(255,220,228,0.12);}
+#fd-wrap .f-list li::before{content:'✦';font-size:0.5rem;color:var(--burg);margin-top:5px;flex-shrink:0;}
+#fd-wrap .tier.featured .f-list li::before{color:#fde8ec;}
+#fd-wrap .f-list li.muted{opacity:0.3;text-decoration:line-through;}
+#fd-wrap .t-btn{display:block;width:100%;padding:14px;text-align:center;font-family:var(--sans);font-size:0.78rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;border:1px solid var(--burg);color:var(--burg);background:transparent;cursor:pointer;transition:all 0.2s;}
+#fd-wrap .t-btn:hover{background:var(--burg);color:var(--white);}
+#fd-wrap .tier.featured .t-btn{background:rgba(255,255,255,0.15);border-color:rgba(255,220,228,0.5);color:#fde8ec;}
+#fd-wrap .tier.featured .t-btn:hover{background:rgba(255,255,255,0.25);}
+
+/* PRESTIGE ENQUIRE */
+#fd-wrap .p-enq{display:flex;flex-direction:column;gap:8px;background:var(--linen);border:1px solid var(--sand);border-left:3px solid var(--burg);padding:16px 18px;margin-bottom:16px;}
+#fd-wrap .p-enq-label{font-family:var(--serif);font-size:1.3rem;font-weight:300;color:var(--burg);}
+#fd-wrap .p-enq-sub{font-size:0.76rem;color:var(--stone);line-height:1.6;}
+
+/* MAINTENANCE */
+#fd-maint{padding:0 32px 80px;background:var(--deep);}
+#fd-wrap .maint-card{max-width:1200px;margin:0 auto;background:var(--white);border:1px solid var(--sand);border-top:3px solid var(--burg);padding:36px 48px;display:flex;align-items:center;gap:40px;flex-wrap:wrap;}
+#fd-wrap .maint-icon{font-size:2rem;flex-shrink:0;}
+#fd-wrap .maint-text{flex:1;min-width:220px;}
+#fd-wrap .maint-text h3{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:var(--ink);margin-bottom:6px;}
+#fd-wrap .maint-text p{font-size:0.82rem;color:var(--stone);line-height:1.7;}
+#fd-wrap .maint-tiers{display:flex;gap:0;border:1px solid var(--sand);flex-shrink:0;}
+#fd-wrap .m-tier{display:flex;flex-direction:column;align-items:center;padding:16px 24px;background:var(--linen);border-right:1px solid var(--sand);gap:4px;}
+#fd-wrap .m-tier:last-child{border-right:none;}
+#fd-wrap .m-name{font-size:0.68rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--stone);}
+#fd-wrap .m-price{font-family:var(--serif);font-size:1.5rem;font-weight:300;color:var(--burg);}
+#fd-wrap .m-price small{font-family:var(--sans);font-size:0.65rem;color:var(--stone);}
+
+/* PRESTIGE SECTION */
+#fd-prestige{padding:0 32px 100px;background:var(--deep);}
+#fd-wrap .pres-card{max-width:1200px;margin:0 auto;background:var(--white);border:1px solid var(--sand);padding:64px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;overflow:hidden;}
+#fd-wrap .pres-label{font-size:0.7rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--burg);margin-bottom:16px;display:block;}
+#fd-wrap .pres-title{font-family:var(--serif);font-size:clamp(2rem,3.5vw,3rem);font-weight:300;color:var(--ink);line-height:1.15;margin-bottom:20px;}
+#fd-wrap .pres-title em{font-style:italic;color:var(--burg);}
+#fd-wrap .pres-desc{font-size:0.92rem;color:var(--stone);line-height:1.8;margin-bottom:36px;}
+#fd-wrap .pres-price{font-family:var(--serif);font-size:1.05rem;font-weight:300;font-style:italic;color:var(--stone);margin-bottom:28px;line-height:1.7;border-left:2px solid var(--burg);padding-left:16px;}
+#fd-wrap .pres-btn{display:inline-block;padding:16px 40px;background:var(--burg);color:var(--white);font-size:0.78rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;transition:background 0.2s;border:none;cursor:pointer;}
+#fd-wrap .pres-btn:hover{background:var(--burg-lt);}
+#fd-wrap .pres-feats{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+#fd-wrap .pres-feat{padding:20px;background:var(--linen);border:1px solid var(--sand);}
+#fd-wrap .pres-feat-icon{font-size:1.4rem;margin-bottom:10px;display:block;}
+#fd-wrap .pres-feat h4{font-family:var(--serif);font-size:1rem;font-weight:400;color:var(--ink);margin-bottom:6px;}
+#fd-wrap .pres-feat p{font-size:0.78rem;color:var(--stone);line-height:1.5;}
+
+/* ADDONS */
+#fd-addons{padding:100px 32px;background:var(--linen);position:relative;overflow:hidden;}
+#fd-wrap .addons-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--sand);border:1px solid var(--sand);}
+#fd-wrap .addon{background:var(--white);padding:28px 24px;display:flex;flex-direction:column;gap:6px;}
+#fd-wrap .addon-name{font-size:0.88rem;color:var(--ink);font-weight:400;}
+#fd-wrap .addon-desc{font-size:0.76rem;color:var(--stone);line-height:1.5;flex:1;}
+#fd-wrap .addon-price{font-family:var(--serif);font-size:1.3rem;color:var(--burg);margin-top:8px;}
+
+/* ONE ON ONE */
+#fd-oneone{padding:100px 32px;background:var(--burg);position:relative;overflow:hidden;}
+#fd-oneone .s-label{color:#fde8ec;}
+#fd-oneone .s-title{color:var(--white);}
+#fd-oneone .s-sub{color:rgba(255,220,228,0.6);}
+#fd-wrap .oo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;max-width:1200px;margin:0 auto;border:1px solid rgba(255,220,228,0.2);}
+#fd-wrap .oo-step{padding:40px 32px;border-right:1px solid rgba(255,220,228,0.2);}
+#fd-wrap .oo-step:last-child{border-right:none;}
+#fd-wrap .oo-num{font-family:var(--serif);font-size:3.5rem;font-weight:300;color:rgba(255,220,228,0.15);line-height:1;margin-bottom:12px;}
+#fd-wrap .oo-icon{font-size:1.6rem;margin-bottom:14px;display:block;}
+#fd-wrap .oo-step h3{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:#fde8ec;margin-bottom:10px;}
+#fd-wrap .oo-step p{font-size:0.82rem;color:rgba(255,220,228,0.65);line-height:1.8;}
+
+/* TRUST */
+#fd-trust{padding:100px 32px;background:var(--deep);position:relative;overflow:hidden;}
+#fd-wrap .trust-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:48px;text-align:center;}
+#fd-wrap .trust-item h3{font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--ink);margin-bottom:8px;}
+#fd-wrap .trust-item p{font-size:0.82rem;color:var(--stone);line-height:1.7;}
+#fd-wrap .trust-icon{font-size:1.6rem;margin-bottom:14px;display:block;}
+
+/* FOOTER CTA */
+#fd-footer-cta{padding:100px 32px;background:var(--burg);text-align:center;position:relative;overflow:hidden;}
+#fd-footer-cta h2{font-family:var(--serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;color:var(--white);margin-bottom:16px;}
+#fd-footer-cta h2 em{font-style:italic;color:#fde8ec;}
+#fd-footer-cta p{color:rgba(255,220,228,0.6);font-size:0.9rem;margin-bottom:40px;}
+#fd-footer-cta a{display:inline-block;padding:16px 48px;background:var(--white);color:var(--burg);font-size:0.78rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;transition:background 0.2s;}
+#fd-footer-cta a:hover{background:#fde8ec;}
+#fd-footer{padding:28px 48px;background:var(--ink);display:flex;justify-content:space-between;align-items:center;}
+#fd-footer span{font-size:0.75rem;color:rgba(255,220,228,0.3);}
+
+/* SCROLL ANIMATIONS */
+#fd-wrap [data-a]{opacity:0;transition:opacity 0.75s cubic-bezier(.22,.68,0,1.2),transform 0.75s cubic-bezier(.22,.68,0,1.2);}
+#fd-wrap [data-a="up"]{transform:translateY(40px);}
+#fd-wrap [data-a="up"].in{opacity:1;transform:translateY(0);}
+#fd-wrap [data-a="left"]{transform:translateX(-50px) rotate(-2deg);}
+#fd-wrap [data-a="left"].in{opacity:1;transform:translateX(0) rotate(0deg);}
+#fd-wrap [data-a="right"]{transform:translateX(50px) rotate(2deg);}
+#fd-wrap [data-a="right"].in{opacity:1;transform:translateX(0) rotate(0deg);}
+#fd-wrap [data-a="t1"]{transform:translateX(-120px) rotate(-3deg);opacity:0;}
+#fd-wrap [data-a="t1"].in{opacity:1;transform:translateX(0) rotate(0deg);}
+#fd-wrap [data-a="t2"]{transform:translateY(80px) scale(0.92);opacity:0;}
+#fd-wrap [data-a="t2"].in{opacity:1;transform:translateY(0) scale(1);}
+#fd-wrap [data-a="t3"]{transform:translateY(80px) scale(0.92);opacity:0;}
+#fd-wrap [data-a="t3"].in{opacity:1;transform:translateY(0) scale(1);}
+#fd-wrap [data-a="t4"]{transform:translateX(120px) rotate(3deg);opacity:0;}
+#fd-wrap [data-a="t4"].in{opacity:1;transform:translateX(0) rotate(0deg);}
+#fd-wrap [data-a^="t"]{transition:opacity 0.8s cubic-bezier(.22,.68,0,1.1),transform 0.8s cubic-bezier(.22,.68,0,1.1);}
+
+/* MODAL */
+#fd-modal-overlay{position:fixed;inset:0;z-index:99998;background:rgba(28,8,16,0.5);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity 0.3s ease;}
+#fd-modal-overlay.open{opacity:1;pointer-events:all;}
+#fd-modal{position:fixed;z-index:99999;top:50%;left:50%;transform:translate(-50%,-48%) scale(0.95);width:min(520px,92vw);background:var(--white);border:1px solid var(--sand);border-top:4px solid var(--burg);padding:52px 48px 44px;opacity:0;pointer-events:none;transition:opacity 0.3s ease,transform 0.35s cubic-bezier(.22,.68,0,1.2);text-align:center;font-family:var(--sans);}
+#fd-modal.open{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1);}
+#fd-modal-close{position:absolute;top:16px;right:18px;background:none;border:none;cursor:pointer;font-size:0.9rem;color:var(--stone);width:32px;height:32px;display:flex;align-items:center;justify-content:center;transition:color 0.2s;}
+#fd-modal-close:hover{color:var(--burg);}
+#fd-wrap .modal-ey{font-size:0.68rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--burg);margin-bottom:14px;display:block;}
+#fd-wrap .modal-title{font-family:var(--serif);font-size:2.1rem;font-weight:300;color:var(--ink);line-height:1.15;margin-bottom:14px;}
+#fd-wrap .modal-title em{font-style:italic;color:var(--burg);}
+#fd-wrap .modal-sub{font-size:0.88rem;color:var(--stone);line-height:1.75;max-width:360px;margin:0 auto;}
+#fd-wrap .modal-div{width:44px;height:1px;background:var(--burg);opacity:0.3;margin:26px auto;}
+#fd-wrap .modal-contacts{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+#fd-wrap .mc-item{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--linen);border:1px solid var(--sand);text-decoration:none;text-align:left;transition:border-color 0.2s,background 0.2s;}
+#fd-wrap .mc-item:hover{border-color:var(--burg);background:#fdf0f2;}
+#fd-wrap .mc-icon{font-size:1.1rem;flex-shrink:0;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--white);border:1px solid var(--sand);}
+#fd-wrap .mc-item div{display:flex;flex-direction:column;gap:2px;}
+#fd-wrap .mc-label{font-size:0.65rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);}
+#fd-wrap .mc-value{font-family:var(--serif);font-size:1rem;color:var(--ink);}
+#fd-wrap .modal-note{font-size:0.7rem;color:var(--stone);letter-spacing:0.06em;}
+
+@media(max-width:1024px){#fd-wrap .pricing-grid{grid-template-columns:repeat(2,1fr);}#fd-wrap .tier{border-right:none;border-bottom:1px solid var(--sand);}#fd-wrap .tier:nth-child(odd){border-right:1px solid var(--sand);}#fd-wrap .pres-card{grid-template-columns:1fr;gap:40px;padding:40px;}}
+@media(max-width:768px){#fd-nav{padding:16px 20px;}#fd-hero{padding:120px 20px 80px;}#fd-wrap .oo-grid{grid-template-columns:repeat(2,1fr);}#fd-wrap .oo-step{border-right:none;border-bottom:1px solid rgba(255,220,228,0.2);}#fd-wrap .oo-step:nth-child(odd){border-right:1px solid rgba(255,220,228,0.2);}#fd-wrap .maint-card{padding:28px 20px;}}
+@media(max-width:640px){#fd-wrap .pricing-grid{grid-template-columns:1fr;}#fd-wrap .tier:nth-child(odd){border-right:none;}#fd-wrap .addons-grid{grid-template-columns:1fr;}#fd-wrap .trust-grid{grid-template-columns:1fr;gap:32px;}#fd-wrap .pres-feats{grid-template-columns:1fr;}#fd-wrap .pres-card{padding:28px;}#fd-wrap .oo-grid{grid-template-columns:1fr;}#fd-wrap .oo-step:nth-child(odd){border-right:none;}}
+</style>
+
+<canvas id="fd-curveCanvas"></canvas>
+
+<!-- NAV -->
+<nav id="fd-nav">
+  <a href="#" class="fd-logo">Forever <span>Digital</span></a>
+  <a href="#fd-contact" class="fd-cta">Get a Quote</a>
+</nav>
+
+<!-- SCROLL SPINNER -->
+<div id="fd-spinner">
+  <svg viewBox="0 0 64 64" fill="none">
+    <circle cx="32" cy="32" r="28" stroke="#7a1f30" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.6"/>
+    <circle cx="32" cy="32" r="18" stroke="#7a1f30" stroke-width="0.6" opacity="0.3"/>
+    <circle cx="32" cy="4" r="3.5" fill="#7a1f30" opacity="0.7"/>
+  </svg>
+  <div id="fd-spinner-dot"></div>
+</div>
+
+<!-- HERO -->
+<section id="fd-hero">
+  <div class="spin-ring sr1"></div>
+  <div class="spin-ring sr2"></div>
+  <div class="spin-ring sr3"></div>
+  <div class="dot-field" id="fd-dots"></div>
+  <div class="hero-wm">FOREVER</div>
+  <svg class="co co-tl" viewBox="0 0 220 220" fill="none"><path d="M0,220 Q0,0 220,0" stroke="#7a1f30" stroke-width="1.2" opacity="0.22"/><path d="M0,170 Q0,0 170,0" stroke="#7a1f30" stroke-width="0.6" opacity="0.14"/><path d="M0,120 Q0,0 120,0" stroke="#7a1f30" stroke-width="0.4" opacity="0.09"/><circle cx="0" cy="0" r="10" fill="none" stroke="#7a1f30" stroke-width="1.2" opacity="0.35"/><circle cx="0" cy="0" r="24" fill="none" stroke="#7a1f30" stroke-width="0.5" opacity="0.18"/></svg>
+  <svg class="co co-tr" viewBox="0 0 220 220" fill="none"><path d="M220,220 Q220,0 0,0" stroke="#7a1f30" stroke-width="1.2" opacity="0.22"/><path d="M220,170 Q220,0 50,0" stroke="#7a1f30" stroke-width="0.6" opacity="0.14"/><circle cx="220" cy="0" r="10" fill="none" stroke="#7a1f30" stroke-width="1.2" opacity="0.35"/></svg>
+  <svg class="co co-bl" viewBox="0 0 220 220" fill="none"><path d="M0,0 Q0,220 220,220" stroke="#7a1f30" stroke-width="1.2" opacity="0.22"/><circle cx="0" cy="220" r="10" fill="none" stroke="#7a1f30" stroke-width="1.2" opacity="0.35"/></svg>
+  <svg class="co co-br" viewBox="0 0 220 220" fill="none"><path d="M220,0 Q220,220 0,220" stroke="#7a1f30" stroke-width="1.2" opacity="0.22"/><circle cx="220" cy="220" r="10" fill="none" stroke="#7a1f30" stroke-width="1.2" opacity="0.35"/></svg>
+  <span class="hero-ey" data-a="up">Wedding Websites · Cyprus</span>
+  <h1 data-a="up" style="transition-delay:0.12s">Your love story,<br><em>beautifully online</em></h1>
+  <p class="hero-sub" data-a="up" style="transition-delay:0.22s">QR-ready wedding websites for couples celebrating in Cyprus. From elegant essentials to a fully bespoke digital experience.</p>
+  <div class="hero-div" data-a="up" style="transition-delay:0.32s"></div>
+  <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#f9f3f1" opacity="0.5"/><path d="M0,55 C360,20 720,70 1080,30 C1260,15 1380,50 1440,55" stroke="#7a1f30" stroke-width="1" fill="none" opacity="0.25"/></svg>
+</section>
+
+<div class="flourish"><span>✦ ✦ ✦</span></div>
+
+<!-- PRICING -->
+<section id="fd-pricing">
+  <div class="sec-wm">PACKAGES</div>
+  <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:0.045;" viewBox="0 0 1200 600" preserveAspectRatio="none"><path d="M0,80 Q300,10 600,100 T1200,60" stroke="#7a1f30" stroke-width="2" fill="none"/><path d="M0,520 Q400,440 800,540 T1200,480" stroke="#7a1f30" stroke-width="1.5" fill="none"/><path d="M80,0 Q150,300 60,600" stroke="#7a1f30" stroke-width="1.2" fill="none"/><path d="M1120,0 Q1050,300 1140,600" stroke="#7a1f30" stroke-width="1.2" fill="none"/><circle cx="600" cy="300" r="220" stroke="#7a1f30" stroke-width="0.8" fill="none" opacity="0.6"/></svg>
+  <span class="s-label" data-a="up">Packages</span>
+  <span class="s-title" data-a="up" style="transition-delay:0.1s">Choose your experience</span>
+  <span class="s-sub" data-a="up" style="transition-delay:0.2s">Every package includes a custom QR code, mobile-optimised design, and hosted on a secure server.</span>
+  <div class="pricing-grid">
+    <div class="tier" data-a="t1">
+      <span class="tier-name">Essential</span><span class="tier-tag">Simple, beautiful, done.</span>
+      <div class="tier-price"><span class="t-currency">€</span><span class="t-amount">349</span><span class="t-qual">one-time · €20/mo after your wedding</span></div>
+      <div class="t-div"></div>
+      <ul class="f-list"><li>Single-page website</li><li>1 QR code (printable PDF)</li><li>RSVP button (external link)</li><li>Mobile-optimised design</li><li>12 months hosting</li><li>Template design</li><li class="muted">Guest dashboard</li><li class="muted">Custom design</li><li class="muted">Multilingual</li></ul>
+      <a href="#fd-contact" class="t-btn">Get Started</a>
+    </div>
+    <div class="tier featured" data-a="t2" style="transition-delay:0.1s">
+      <div class="tier-badge">Most Popular</div>
+      <span class="tier-name">Signature</span><span class="tier-tag">The complete wedding website.</span>
+      <div class="tier-price"><span class="t-currency">€</span><span class="t-amount">649</span><span class="t-qual">one-time · €29/mo after your wedding</span></div>
+      <div class="t-div"></div>
+      <ul class="f-list"><li>3-page website</li><li>3 QR code designs</li><li>RSVP form + guest list</li><li>Our Story, Registry, Travel info</li><li>Photo gallery</li><li>Custom colour palette</li><li>24 months hosting</li><li>1 revision round</li><li class="muted">Printed materials</li></ul>
+      <a href="#fd-contact" class="t-btn">Get Started</a>
+    </div>
+    <div class="tier" data-a="t3" style="transition-delay:0.2s">
+      <span class="tier-name">Luxury</span><span class="tier-tag">Fully custom, fully yours.</span>
+      <div class="tier-price"><span class="t-currency">€</span><span class="t-amount">1,199</span><span class="t-qual">one-time · €45/mo after your wedding</span></div>
+      <div class="t-div"></div>
+      <ul class="f-list"><li>5-page website</li><li>Unlimited QR variants</li><li>Full custom design</li><li>Animated elements</li><li>Password-protected access</li><li>Countdown timer</li><li>Post-wedding gallery</li><li>36 months hosting</li><li>3 revision rounds</li></ul>
+      <a href="#fd-contact" class="t-btn">Get Started</a>
+    </div>
+    <div class="tier" data-a="t4" style="transition-delay:0.1s">
+      <span class="tier-name">Prestige</span><span class="tier-tag">Full-service, from vision to wedding day.</span>
+      <div class="p-enq"><span class="p-enq-label">Tailored pricing</span><span class="p-enq-sub">Every Prestige wedding is unique — get in touch and we'll craft a proposal just for you.</span></div>
+      <div class="t-div"></div>
+      <ul class="f-list"><li>Everything in Luxury</li><li>Bespoke brand identity</li><li>Printed QR table cards</li><li>Live guest check-in</li><li>Wedding day concierge</li><li>3 languages included</li><li>5 years hosting</li><li>Memory archive after wedding</li><li>Unlimited revisions</li></ul>
+      <a href="#fd-contact" class="t-btn">Book a Discovery Call</a>
+    </div>
+  </div>
+</section>
+
+<div class="flourish"><span>✦ ✦ ✦</span></div>
+
+<!-- MAINTENANCE -->
+<section id="fd-maint">
+  <div class="maint-card" data-a="up">
+    <div class="maint-icon">🔧</div>
+    <div class="maint-text"><h3>Your site, fully covered until the big day</h3><p>Every package is all-inclusive from the moment we build it until your wedding day. After that, a small monthly fee keeps your memory archive live, secure, and accessible for as long as you love it. Cancel any time with 30 days' notice.</p></div>
+    <div class="maint-tiers">
+      <div class="m-tier"><span class="m-name">Essential</span><span class="m-price">€20<small>/mo</small></span></div>
+      <div class="m-tier"><span class="m-name">Signature</span><span class="m-price">€29<small>/mo</small></span></div>
+      <div class="m-tier"><span class="m-name">Luxury</span><span class="m-price">€45<small>/mo</small></span></div>
+      <div class="m-tier"><span class="m-name">Prestige</span><span class="m-price" style="font-size:1rem;padding-top:4px;">On enquiry</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="flourish"><span>✦ ✦ ✦</span></div>
+
+<!-- PRESTIGE DEEP DIVE -->
+<section id="fd-prestige">
+  <div class="pres-card">
+    <svg style="position:absolute;top:-20px;right:-20px;width:300px;height:300px;pointer-events:none;opacity:0.05;" viewBox="0 0 300 300"><circle cx="300" cy="0" r="200" stroke="#7a1f30" stroke-width="1" fill="none"/><circle cx="300" cy="0" r="140" stroke="#7a1f30" stroke-width="0.6" fill="none" stroke-dasharray="6 4"/></svg>
+    <div data-a="right">
+      <span class="pres-label">For couples who want everything</span>
+      <h2 class="pres-title">The Prestige<br><em>experience</em></h2>
+      <p class="pres-desc">For destination weddings in Cyprus where every detail matters. We become part of your wedding team — not just your web designer. From a bespoke visual identity to being on call on your wedding day, Prestige is for couples whose day deserves something extraordinary.</p>
+      <p class="pres-price">Pricing is shared after a discovery call — every Prestige package is built around <em>your</em> wedding, not a template.</p>
+      <a href="#fd-contact" class="pres-btn">Book a Discovery Call</a>
+    </div>
+    <div class="pres-feats" data-a="left">
+      <div class="pres-feat"><span class="pres-feat-icon">🎨</span><h4>Wedding Brand Identity</h4><p>A bespoke visual identity — colours, fonts, motifs — that runs through your website and printed materials.</p></div>
+      <div class="pres-feat"><span class="pres-feat-icon">📇</span><h4>Printed QR Materials</h4><p>Beautifully designed table cards, welcome signs, and seating charts with your QR code, printed and delivered.</p></div>
+      <div class="pres-feat"><span class="pres-feat-icon">📲</span><h4>Live Guest Check-In</h4><p>Guests scan their QR code on arrival and are marked as present — in real time, no paper lists needed.</p></div>
+      <div class="pres-feat"><span class="pres-feat-icon">📸</span><h4>Memory Archive</h4><p>After the wedding, your site becomes a permanent memory — guests upload their photos, you keep them forever.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="flourish"><span>✦ ✦ ✦</span></div>
+
+<!-- ADD-ONS -->
+<section id="fd-addons">
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.07;" viewBox="0 0 1200 500" preserveAspectRatio="none"><path d="M-100,250 Q300,50 600,250 T1300,250" stroke="#7a1f30" stroke-width="2" fill="none"/><path d="M-100,280 Q300,80 600,280 T1300,280" stroke="#7a1f30" stroke-width="1" fill="none"/><circle cx="1050" cy="100" r="120" stroke="#7a1f30" stroke-width="1" fill="none"/><circle cx="150" cy="400" r="90" stroke="#7a1f30" stroke-width="0.8" fill="none"/></svg>
+  <span class="s-label" data-a="up">Extras</span>
+  <span class="s-title" data-a="up" style="transition-delay:0.1s">Add-ons</span>
+  <span class="s-sub" data-a="up" style="transition-delay:0.2s">Enhance any package with these optional extras.</span>
+  <div class="addons-grid">
+    <div class="addon" data-a="up" style="transition-delay:0.05s"><p class="addon-name">Greek & English bilingual</p><p class="addon-desc">Your full website in both Greek and English, seamlessly toggled.</p><p class="addon-price">€69</p></div>
+    <div class="addon" data-a="up" style="transition-delay:0.1s"><p class="addon-name">Hebrew version</p><p class="addon-desc">Full right-to-left Hebrew translation for your Israeli guests.</p><p class="addon-price">€79</p></div>
+    <div class="addon" data-a="up" style="transition-delay:0.15s"><p class="addon-name">Russian version</p><p class="addon-desc">Complete Russian language version of your website.</p><p class="addon-price">€69</p></div>
+    <div class="addon" data-a="up" style="transition-delay:0.2s"><p class="addon-name">Custom domain</p><p class="addon-desc">Your own domain — e.g. sarah-and-james.com — registered for 2 years.</p><p class="addon-price">€39</p></div>
+    <div class="addon" data-a="up" style="transition-delay:0.25s"><p class="addon-name">Extra hosting year</p><p class="addon-desc">Extend your website hosting by one additional year.</p><p class="addon-price">€29/yr</p></div>
+    <div class="addon" data-a="up" style="transition-delay:0.3s"><p class="addon-name">Post-wedding memory page</p><p class="addon-desc">Transform your wedding site into a guest photo-sharing memory archive.</p><p class="addon-price">€49</p></div>
+  </div>
+</section>
+
+<div class="flourish"><span>✦ ✦ ✦</span></div>
+
+<!-- ONE ON ONE -->
+<section id="fd-oneone">
+  <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;opacity:0.08;width:min(700px,90vw);height:min(700px,90vw);" viewBox="0 0 700 700"><circle cx="350" cy="350" r="330" stroke="#fde8ec" stroke-width="1" fill="none"/><circle cx="350" cy="350" r="260" stroke="#fde8ec" stroke-width="0.6" fill="none" stroke-dasharray="8 6"/><circle cx="350" cy="350" r="185" stroke="#fde8ec" stroke-width="0.5" fill="none"/><circle cx="350" cy="350" r="110" stroke="#fde8ec" stroke-width="0.4" fill="none" stroke-dasharray="4 4"/><line x1="350" y1="20" x2="350" y2="680" stroke="#fde8ec" stroke-width="0.3" opacity="0.5"/><line x1="20" y1="350" x2="680" y2="350" stroke="#fde8ec" stroke-width="0.3" opacity="0.5"/></svg>
+  <span class="s-label" data-a="up">How it works</span>
+  <span class="s-title" data-a="up" style="transition-delay:0.1s">Built around <em style="font-style:italic;color:#fde8ec;">you</em>, from start to forever</span>
+  <span class="s-sub" data-a="up" style="transition-delay:0.2s">We don't hand you a template and disappear. Every website is shaped through personal conversations — and stays editable whenever you need it.</span>
+  <div class="oo-grid">
+    <div class="oo-step" data-a="up" style="transition-delay:0.05s"><div class="oo-num">01</div><span class="oo-icon">☎️</span><h3>Discovery call</h3><p>We start with a one-on-one call to understand your vision, your wedding style, your guests, and what matters most to you. No forms, no questionnaires — just a real conversation.</p></div>
+    <div class="oo-step" data-a="up" style="transition-delay:0.15s"><div class="oo-num">02</div><span class="oo-icon">🎨</span><h3>Built around your story</h3><p>We design your site to reflect your relationship — your colours, your photos, your tone. Every detail is discussed with you before anything goes live.</p></div>
+    <div class="oo-step" data-a="up" style="transition-delay:0.25s"><div class="oo-num">03</div><span class="oo-icon">✏️</span><h3>Edit any time, instantly</h3><p>Venue changed? New dietary info? Just message us and it's updated — usually within hours. Your website is never frozen. It evolves with your plans right up to the day.</p></div>
+    <div class="oo-step" data-a="up" style="transition-delay:0.35s"><div class="oo-num">04</div><span class="oo-icon">💬</span><h3>Always in touch</h3><p>You'll have a direct line to us throughout the process. No support tickets, no waiting queues. We're here whenever you need us — before, during, and after your wedding.</p></div>
+  </div>
+</section>
+
+<div class="flourish"><span>✦ ✦ ✦</span></div>
+
+<!-- TRUST -->
+<section id="fd-trust">
+  <svg style="position:absolute;bottom:0;right:0;pointer-events:none;opacity:0.06;width:380px;height:380px;" viewBox="0 0 380 380"><path d="M380,380 Q190,190 0,380" stroke="#7a1f30" stroke-width="2" fill="none"/><path d="M380,320 Q210,160 0,320" stroke="#7a1f30" stroke-width="1" fill="none"/><circle cx="380" cy="380" r="140" stroke="#7a1f30" stroke-width="0.7" fill="none"/></svg>
+  <svg style="position:absolute;top:0;left:0;pointer-events:none;opacity:0.06;width:280px;height:280px;" viewBox="0 0 280 280"><path d="M0,0 Q140,140 280,0" stroke="#7a1f30" stroke-width="2" fill="none"/><circle cx="0" cy="0" r="100" stroke="#7a1f30" stroke-width="0.7" fill="none"/></svg>
+  <span class="s-label" data-a="up">Why us</span>
+  <span class="s-title" data-a="up" style="transition-delay:0.1s">Built for Cyprus weddings</span>
+  <span class="s-sub" data-a="up" style="transition-delay:0.2s">We understand the destination wedding market — and we speak your guests' languages.</span>
+  <div class="trust-grid">
+    <div class="trust-item" data-a="up" style="transition-delay:0.05s"><span class="trust-icon">🌊</span><h3>Cyprus specialists</h3><p>We know Limassol, Paphos, and Ayia Napa's venues inside out. Your guests get local info that's actually useful.</p></div>
+    <div class="trust-item" data-a="up" style="transition-delay:0.15s"><span class="trust-icon">🌍</span><h3>Multilingual by default</h3><p>English, Greek, Hebrew, Russian — we cover the languages of couples who marry in Cyprus.</p></div>
+    <div class="trust-item" data-a="up" style="transition-delay:0.25s"><span class="trust-icon">📱</span><h3>QR-first design</h3><p>Every site is built to be discovered by a phone camera. Fast, seamless, and beautiful from the first scan.</p></div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section id="fd-footer-cta" id="fd-contact">
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.09;" viewBox="0 0 1200 400" preserveAspectRatio="none"><path d="M0,200 Q300,40 600,200 T1200,200" stroke="#fde8ec" stroke-width="2" fill="none"/><circle cx="100" cy="80" r="90" stroke="#fde8ec" stroke-width="0.7" fill="none"/><circle cx="1100" cy="320" r="110" stroke="#fde8ec" stroke-width="0.7" fill="none"/><circle cx="600" cy="200" r="180" stroke="#fde8ec" stroke-width="0.5" fill="none" stroke-dasharray="7 5"/></svg>
+  <h2 data-a="up">Ready to start your<br><em>wedding website?</em></h2>
+  <p data-a="up" style="transition-delay:0.1s">Get in touch and we'll have your site live within 5 working days.</p>
+  <a href="#fd-contact" data-a="up" style="transition-delay:0.2s">Get in Touch</a>
+</section>
+
+<div id="fd-footer">
+  <span>© 2026 Forever Digital · Cyprus</span>
+  <span>Wedding websites & QR experiences</span>
+</div>
+
+<!-- MODAL -->
+<div id="fd-modal-overlay"></div>
+<div id="fd-modal">
+  <button id="fd-modal-close">✕</button>
+  <span class="modal-ey">Get in touch</span>
+  <h2 class="modal-title">Let's create something <em>beautiful</em></h2>
+  <p class="modal-sub">We'd love to hear about your wedding and find the perfect package for you. Reach out and we'll get back to you within 24 hours.</p>
+  <div class="modal-div"></div>
+  <div class="modal-contacts">
+    <a href="mailto:hello@foreverdigital.cy" class="mc-item"><span class="mc-icon">✉</span><div><span class="mc-label">Email us</span><span class="mc-value">hello@foreverdigital.cy</span></div></a>
+    <a href="https://wa.me/35799000000" class="mc-item"><span class="mc-icon">💬</span><div><span class="mc-label">WhatsApp</span><span class="mc-value">+357 99 000 000</span></div></a>
+  </div>
+  <p class="modal-note">Based in Cyprus · Serving couples worldwide</p>
+</div>
+
+<script>
+(function(){
+// CANVAS
+const canvas=document.getElementById('fd-curveCanvas');
+const ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+const curves=[
+  {x1:-0.05,y1:0.08,cx1:0.3,cy1:0.28,cx2:0.7,cy2:-0.08,x2:1.05,y2:0.18,speed:0.00022,color:'rgba(122,31,48,0.32)',width:2.0},
+  {x1:-0.05,y1:0.40,cx1:0.25,cy1:0.60,cx2:0.75,cy2:0.22,x2:1.05,y2:0.50,speed:0.00030,color:'rgba(122,31,48,0.26)',width:1.8},
+  {x1:-0.05,y1:0.65,cx1:0.4,cy1:0.45,cx2:0.6,cy2:0.85,x2:1.05,y2:0.70,speed:0.00018,color:'rgba(122,31,48,0.24)',width:1.6},
+  {x1:-0.05,y1:0.88,cx1:0.5,cy1:0.68,cx2:0.5,cy2:1.08,x2:1.05,y2:0.86,speed:0.00014,color:'rgba(122,31,48,0.18)',width:1.4},
+  {x1:0.06,y1:-0.05,cx1:-0.06,cy1:0.35,cx2:0.18,cy2:0.65,x2:0.03,y2:1.05,speed:0.00025,color:'rgba(184,134,74,0.20)',width:1.4},
+  {x1:0.94,y1:-0.05,cx1:1.06,cy1:0.35,cx2:0.82,cy2:0.65,x2:0.97,y2:1.05,speed:0.00020,color:'rgba(184,134,74,0.18)',width:1.2},
+];
+let sY=window.scrollY;
+window.addEventListener('scroll',()=>{sY=window.scrollY;},{passive:true});
+function draw(){
+  const W=canvas.width,H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  curves.forEach((c,i)=>{
+    const sh=sY*c.speed*H,wv=Math.sin(sY*0.0008+i*0.7)*0.09;
+    ctx.beginPath();ctx.moveTo(c.x1*W,c.y1*H+sh);
+    ctx.bezierCurveTo((c.cx1+wv)*W,c.cy1*H+sh*0.7,(c.cx2-wv)*W,c.cy2*H+sh*0.4,c.x2*W,c.y2*H+sh*0.15);
+    ctx.strokeStyle=c.color;ctx.lineWidth=c.width;ctx.stroke();
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+
+// DOTS
+const df=document.getElementById('fd-dots');
+if(df){for(let i=0;i<24;i++){const d=document.createElement('div');d.className='dot';const s=Math.random()*9+3;d.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${5+Math.random()*9}s;animation-delay:${Math.random()*8}s;`;df.appendChild(d);}}
+
+// SPINNER
+const sp=document.getElementById('fd-spinner');
+const spSvg=sp.querySelector('svg');
+let lsY=window.scrollY,ang=0,spd=0;
+function animSp(){const cY=window.scrollY;spd=Math.min(Math.abs(cY-lsY)*1.8,18);lsY=cY;ang=(ang+spd)%360;spSvg.style.transform=`rotate(${ang}deg)`;spd*=0.92;requestAnimationFrame(animSp);}
+animSp();
+window.addEventListener('scroll',()=>{const hH=document.getElementById('fd-hero').offsetHeight;sp.classList.toggle('visible',window.scrollY>hH*0.5);},{passive:true});
+
+// PARALLAX RINGS
+const rings=document.querySelectorAll('#fd-hero .spin-ring');
+window.addEventListener('scroll',()=>{const y=window.scrollY;rings.forEach((r,i)=>{const f=(i+1)*0.08;r.style.transform=`translateY(${y*f}px) rotate(${y*(i%2===0?0.03:-0.03)}deg)`;});},{passive:true});
+
+// SCROLL ANIMATIONS
+const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});},{threshold:0.1});
+document.querySelectorAll('#fd-hero [data-a]').forEach(el=>setTimeout(()=>el.classList.add('in'),120));
+document.querySelectorAll('[data-a]:not(#fd-hero [data-a])').forEach(el=>obs.observe(el));
+
+// MODAL
+const modal=document.getElementById('fd-modal');
+const overlay=document.getElementById('fd-modal-overlay');
+const closeBtn=document.getElementById('fd-modal-close');
+function openM(){modal.classList.add('open');overlay.classList.add('open');document.body.style.overflow='hidden';}
+function closeM(){modal.classList.remove('open');overlay.classList.remove('open');document.body.style.overflow='';}
+document.querySelectorAll('a[href="#fd-contact"]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();openM();}));
+closeBtn.addEventListener('click',closeM);
+overlay.addEventListener('click',closeM);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
+})();
+</script>
+</div>
